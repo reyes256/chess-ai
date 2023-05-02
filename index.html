@@ -14,53 +14,47 @@
 <body>
 
 	<header>
-		<h1>Una Partidita De Ajedrez</h1>
+		<h1>Ajedrez</h1>
 	</header>
 
 	<main>
 		<div id="board"></div>
 
 		<div class="stats">
-			<h3><label>Status:</label></h3>
+			<h3><label>Estado Del Juego:</label></h3>
 			<div id="status"></div>
-			<h3><label>FEN:</label></h3>
-			<div id="fen"></div>
-			<h3><label>PGN:</label></h3>
-			<div id="pgn"></div>
 		</div>
-		<button id="showPositionBtn">Show position in console</button>
+		<!-- <button id="showPositionBtn">Show position in console</button> -->
 	</main>
 
 	<script>
 		var board = null
 		var game = new Chess()
 		var $status = $('#status')
-		var $fen = $('#fen')
-		var $pgn = $('#pgn')
 
 		function onDragStart (source, piece, position, orientation) {
-		// do not pick up pieces if the game is over
-		if (game.game_over()) return false
+			// do not pick up pieces if the game is over
+			if (game.game_over()) return false
 
-		// only pick up pieces for the side to move
-		if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-			(game.turn() === 'b' && piece.search(/^w/) !== -1)) {
-			return false
-		}
+			// only pick up pieces for the side to move
+			if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+				(game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+				return false
+			}
 		}
 
 		function onDrop (source, target) {
-		// see if the move is legal
-		var move = game.move({
-			from: source,
-			to: target,
-			promotion: 'q' // NOTE: always promote to a queen for example simplicity
-		})
+			// see if the move is legal
+			var move = game.move({
+				from: source,
+				to: target,
+				promotion: 'q' // NOTE: always promote to a queen for example simplicity
+			})
 
-		// illegal move
-		if (move === null) return 'snapback'
+			// illegal move
+			if (move === null) return 'snapback'
 
-		updateStatus()
+			updateStatus()
 		}
 
 		// update the board position after the piece snap
@@ -72,34 +66,32 @@
 		function updateStatus () {
 			var status = ''
 
-			var moveColor = 'White'
+			var moveColor = 'Blanco'
 			if (game.turn() === 'b') {
-				moveColor = 'Black'
+				moveColor = 'Negro'
 			}
 
 			// checkmate?
 			if (game.in_checkmate()) {
-				status = 'Game over, ' + moveColor + ' is in checkmate.'
+				status = 'Juego Finalizado, ' + moveColor + ' Está En Checkmate.'
 			}
 
 			// draw?
 			else if (game.in_draw()) {
-				status = 'Game over, drawn position'
+				status = 'Juego Finalizado, Empate'
 			}
 
 			// game still on
 			else {
-				status = moveColor + ' to move'
+				status = 'Turno Del Jugador ' + moveColor;
 
 				// check?
 				if (game.in_check()) {
-				status += ', ' + moveColor + ' is in check'
+				status += ', ' + moveColor + ' Está En Check'
 				}
 			}
 
 			$status.html(status)
-			$fen.html(game.fen())
-			$pgn.html(game.pgn())
 		}
 
 		var config = {
