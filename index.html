@@ -23,6 +23,8 @@
 		<div class="stats">
 			<h3><label>Estado Del Juego:</label></h3>
 			<div id="status"></div>
+			<label>PGN:</label>
+			<div id="pgn"></div>
 		</div>
 		<!-- <button id="showPositionBtn">Show position in console</button> -->
 	</main>
@@ -31,6 +33,7 @@
 		var board = null
 		var game = new Chess()
 		var $status = $('#status')
+		var $pgn = $('#pgn')
 
 		var whiteSquareGrey = '#a9a9a9'
 		var blackSquareGrey = '#696969'
@@ -136,6 +139,7 @@
 			}
 
 			$status.html(status)
+			$pgn.html(game.pgn())
 		}
 
 		var config = {
