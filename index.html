@@ -14,16 +14,16 @@
 <body>
 
 	<header>
-		<h1>Ajedrez</h1>
+		<h1>Una Partidita De Ajedrez</h1>
 	</header>
 
 	<main>
 		<div id="board"></div>
 
-		<div class="stats">
+		<!-- <div class="stats">
 			<h3><label>Estado Del Juego:</label></h3>
 			<div id="status"></div>
-		</div>
+		</div> -->
 		<!-- <button id="showPositionBtn">Show position in console</button> -->
 	</main>
 
@@ -55,11 +55,19 @@
 			// do not pick up pieces if the game is over
 			if (game.game_over()) return false
 
-			// only pick up pieces for the side to move
-			if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-				(game.turn() === 'b' && piece.search(/^w/) !== -1)) {
-				return false
-			}
+			// only pick up pieces for White
+			if (piece.search(/^b/) !== -1) return false
+		}
+
+		function makeRandomMove () {
+			var possibleMoves = game.moves()
+
+			// game over
+			if (possibleMoves.length === 0) return
+
+			var randomIdx = Math.floor(Math.random() * possibleMoves.length)
+			game.move(possibleMoves[randomIdx])
+			board.position(game.fen())
 		}
 
 		function onDrop (source, target) {
@@ -74,6 +82,9 @@
 
 			// illegal move
 			if (move === null) return 'snapback'
+
+			// make random legal move for black
+			window.setTimeout(makeRandomMove, 250)
 
 			updateStatus()
 		}
